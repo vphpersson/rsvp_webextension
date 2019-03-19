@@ -1,0 +1,33 @@
+{
+  "name": "rsvp_extension",
+  "version": "0.1",
+  "permissions": [
+    "tabs"
+  ],
+
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": [
+      "js/browser-polyfill.js",
+      "js/content.js"
+    ],
+    "run_at": "document_start"
+  }],
+
+  "background": {
+    "scripts": [
+      "js/browser-polyfill.js",
+      "js/background.js"
+    ]
+  },
+
+  "browser_action": {
+    "default_icon": "icons/shovel.svg",
+    "default_title": "TODO",
+    "default_popup": "components/browser_action/popup.html"
+  },
+
+  "description": "TODO.",
+  "manifest_version": 2
+}
+

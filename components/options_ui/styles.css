@@ -1,0 +1,10 @@
+
+html {
+    min-width: 800px;
+}
+
+.options-form {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr;
+    grid-column-gap: 1em;
+}
