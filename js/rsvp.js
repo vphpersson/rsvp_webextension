@@ -7,27 +7,41 @@ function* make_sibling_iterator(element) {
 }
 
 class RsvpHandler {
-    constructor(word_display_element_selector, text_container_selector, display_time_ms = 150, word_color = 'red', done_text = 'DONE!') {
-        this._word_display_element = document.querySelector(word_display_element_selector);
-        this._text_container_element = document.querySelector(text_container_selector);
+    constructor(word_display_element, display_time_ms = 150, word_color = 'red', done_text = 'DONE!') {
+        this.word_display_element = word_display_element;
+        this.word_elements_iterator = null;
 
-        this._current_timeout_id = null;
-        this._word_elements_iterator = make_sibling_iterator(this._text_container_element.firstElementChild);
-        this._previous_element = null;
-
-        this.display_time_ms = display_time_ms;
-        this.word_color = word_color;
+        this._display_time_ms = display_time_ms;
+        this._word_color = word_color;
         this.done_text = done_text;
 
-        this._register_event_listener();
+        this._current_timeout_id = null;
+        this._previous_element = null;
     }
 
     get is_active() {
         return this._current_timeout_id !== null;
     }
 
+    get display_time_ms() {
+        return this._display_time_ms;
+    }
+
+    set display_time_ms(ms_time) {
+        this._display_time_ms = ms_time === Infinity ? 0 : (ms_time || 0);
+    }
+
+    get word_color() {
+        return this._word_color;
+    }
+
+    set word_color(color) {
+        this._word_color = color;
+        this._color_word_element(this._previous_element);
+    }
+
     set_display_text(text) {
-        this._word_display_element.textContent = text;
+        this.word_display_element.textContent = text;
     }
 
     _uncolor_word_element(element) {
@@ -55,7 +69,7 @@ class RsvpHandler {
             return [iter, iter_element];
         })();
 
-        this._word_elements_iterator = iter_res;
+        this.word_elements_iterator = iter_res;
 
         this._uncolor_word_element(this._previous_element);
         this._color_word_element(last_iter_element);
@@ -74,7 +88,10 @@ class RsvpHandler {
     }
 
     run() {
-        const {value: iter_word_element, done} = this._word_elements_iterator.next();
+        if (this.word_elements_iterator === null)
+            return void console.warn('The word elements iterator is `null`.');
+
+        const {value: iter_word_element, done} = this.word_elements_iterator.next();
 
         this._uncolor_word_element(this._previous_element);
 
@@ -92,50 +109,69 @@ class RsvpHandler {
         window.clearTimeout(this._current_timeout_id);
         this._current_timeout_id = null;
     }
+}
 
-    _register_event_listener() {
-        window.onkeydown = event => {
-            switch (event.code) {
-                case 'Space': {
-                    this._word_display_element.classList.toggle('hidden');
-                    this._text_container_element.classList.toggle('hidden');
+function populate_text_container(text_container, text, word_element_tag_name) {
+    for (const word_segment of text.split(/\s+/)) {
+        const word_element = document.createElement(word_element_tag_name);
+        word_element.appendChild(document.createTextNode(`${word_segment} `));
 
-                    if (this.is_active)
-                        this.pause();
-                    else
-                        this.run();
-
-                    break;
-                }
-                case 'ArrowLeft': {
-                    this.rewind();
-                    break;
-                }
-                case 'ArrowRight': {
-                    this.forward();
-                    break;
-                }
-            }
-        };
+        text_container.appendChild(word_element);
+        console.log('maaater');
     }
 }
 
-(() => {
-    function accept_text(message) {
-        browser.runtime.onMessage.removeListener(accept_text);
+function accept_message(message) {
+    browser.runtime.onMessage.removeListener(accept_message);
 
-        const {text_container_selector, text, word_element_tag_name, word_display_element_selector} = message;
+    const {text_container_selector, text, word_element_tag_name, word_display_element_selector, words_per_minute, word_color, done_text} = message;
 
-        const text_container = document.querySelector(text_container_selector);
-        for (const word_segment of text.split(/\s+/)) {
-            const word_element = document.createElement(word_element_tag_name);
-            word_element.appendChild(document.createTextNode(`${word_segment} `));
+    const text_container = document.querySelector(text_container_selector);
+    const word_display_element = document.querySelector(word_display_element_selector);
+    const topbar = document.querySelector('.topbar');
+    const word_color_input = document.querySelector('.word_color_input');
+    const wpm_input = document.querySelector('.wpm_input');
 
-            text_container.appendChild(word_element);
+    word_color_input.value = word_color;
+    wpm_input.value = words_per_minute;
+
+    populate_text_container(text_container, text, word_element_tag_name);
+
+    const rsvp_handler = new RsvpHandler(word_display_element, (60000 / words_per_minute), word_color, done_text);
+    rsvp_handler.word_elements_iterator = make_sibling_iterator(text_container.firstElementChild);
+
+    word_color_input.addEventListener('change', event => {
+        rsvp_handler.word_color = event.target.value;
+    });
+
+    wpm_input.addEventListener('change', event => {
+        rsvp_handler.display_time_ms = 60000 / event.target.value;
+    });
+
+    window.onkeydown = event => {
+        switch (event.code) {
+            case 'Space': {
+                word_display_element.classList.toggle('hidden');
+                text_container.classList.toggle('hidden');
+                topbar.classList.toggle('hidden');
+
+                if (rsvp_handler.is_active)
+                    rsvp_handler.pause();
+                else
+                    rsvp_handler.run();
+
+                break;
+            }
+            case 'ArrowLeft': {
+                rsvp_handler.rewind();
+                break;
+            }
+            case 'ArrowRight': {
+                rsvp_handler.forward();
+                break;
+            }
         }
+    };
+}
 
-        new RsvpHandler(word_display_element_selector, text_container_selector);
-    }
-
-    browser.runtime.onMessage.addListener(accept_text);
-})();
+browser.runtime.onMessage.addListener(accept_message);
