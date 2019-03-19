@@ -15,7 +15,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .word_display {
@@ -24,9 +24,39 @@
             left: 50%;
             transform: translateX(-50%);
         }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            height: 35px;
+            background-color: #333333;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .topbar_input_container ~ .topbar_input_container {
+            margin-left: 10px;
+        }
+
     </style>
 </head>
 <body>
+    <div class="topbar">
+        <div class="topbar_input_container">
+            <label>
+                Word color
+                <input class="word_color_input" type="color" value="">
+            </label>
+        </div>
+        <div class="topbar_input_container">
+            <label>
+                WPM
+                <input class="wpm_input" type="number" step="25" min="0" value="">
+            </label>
+        </div>
+    </div>
     <main class="main">
     </main>
     <h1 class="word_display hidden"></h1>
