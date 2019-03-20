@@ -28,6 +28,7 @@ class RsvpHandler {
     }
 
     set display_time_ms(ms_time) {
+        // TODO: Fix the case where the delay is 0.
         this._display_time_ms = ms_time === Infinity ? 0 : (ms_time || 0);
     }
 
@@ -44,6 +45,7 @@ class RsvpHandler {
         this.word_display_element.textContent = text;
     }
 
+    // TODO: Make static?
     _uncolor_word_element(element) {
         if (element) {
             element.style.color = '';
@@ -57,7 +59,8 @@ class RsvpHandler {
     }
 
     _rewind_or_forward(direction_attribute_name, num_steps) {
-        let [iter_res, last_iter_element] = (() => {
+        // TODO: Make nicer?
+        const [iter_res, last_iter_element] = (() => {
             let i, iter, iter_element;
             for (i = 0, iter = make_sibling_iterator(this._previous_element), iter_element = this._previous_element; i < num_steps; i++) {
                 if (iter_element[direction_attribute_name] === null)
@@ -102,6 +105,7 @@ class RsvpHandler {
         this.set_display_text(iter_word_element.textContent);
 
         this._previous_element = iter_word_element;
+        // TODO: Fix the case where the delay is 0. Add an if statement?
         this._current_timeout_id = window.setTimeout(this.run.bind(this), this.display_time_ms);
     }
 
@@ -117,10 +121,10 @@ function populate_text_container(text_container, text, word_element_tag_name) {
         word_element.appendChild(document.createTextNode(`${word_segment} `));
 
         text_container.appendChild(word_element);
-        console.log('maaater');
     }
 }
 
+// TODO: Clean up.
 function accept_message(message) {
     browser.runtime.onMessage.removeListener(accept_message);
 

@@ -1,18 +1,35 @@
-document.addEventListener('DOMContentLoaded', async () => {
+new Promise(resolve => {
     let last_colored_element = null;
 
     function onmousemove_event(event) {
-        if (last_colored_element !== null) {
+        if (last_colored_element !== null)
             last_colored_element.style.backgroundColor = last_colored_element.dataset.background_color;
-        }
 
         last_colored_element = event.target;
         last_colored_element.dataset.background_color = event.target.style.backgroundColor;
         event.target.style.backgroundColor = 'green';
     }
-    document.addEventListener('mousemove', onmousemove_event);
 
-    document.addEventListener('click', async event  => {
+    function onkeydown_event(event) {
+        switch (event.code) {
+            case 'Escape': {
+                stop_hovering();
+                break;
+            }
+        }
+    }
+
+    function stop_hovering() {
+        document.removeEventListener('keydown', onmousemove_event);
+        document.removeEventListener('mousemove', onmousemove_event);
+        if (last_colored_element !== null) {
+            last_colored_element.style.backgroundColor = last_colored_element.dataset.background_color;
+        }
+    }
+
+    document.addEventListener('mousemove', onmousemove_event);
+    document.addEventListener('keydown', onkeydown_event);
+    document.addEventListener('click', event  => {
         const text_contents = [];
 
         const node_iterator = document.createNodeIterator(
@@ -29,9 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             for (const word_segment of node.textContent.split(/\s+/).filter(x => x.trim() !== ''))
                 text_contents.push(word_segment);
 
-        last_colored_element.dataset.background_color = event.target.style.backgroundColor;
+        stop_hovering();
 
-        await browser.runtime.sendMessage({text: text_contents.join(' '), message_type: 'receive_text'});
-
+        resolve(text_contents.join(' '));
     }, {once: true});
 });
