@@ -10,6 +10,9 @@ const CONFIG = {
     done_text: 'DONE!'
 };
 
+// TODO: Add a `get_config` function.
+
+// TODO: I want no constants in here!
 async function handle_message(message) {
     const {message_type} = message;
 
@@ -17,9 +20,26 @@ async function handle_message(message) {
         case 'receive_text': {
             // NOTE: This code relies on `executeScript` returning a `Promise`. This does not appear to be supported by
             // the webextension polyfill, and thus this web extension is _unusable in Chrome_.
-            const [text] = await browser.tabs.executeScript({file: '/js/content_select_element.js'});
+
+            const {mode} = message;
+
+            let text;
+            switch (mode) {
+                case 'heuristic_select_element': {
+                    [text] = await browser.tabs.executeScript({file: '/js/content_heuristic_select_element.js'});
+                    break;
+                }
+                case 'select_element': {
+                    [text] = await browser.tabs.executeScript({file: '/js/content_select_element.js'});
+                    break;
+                }
+                default: {
+                    return void console.error(`Unsupported receive_text mode: ${mode}`);
+                }
+            }
+
             if (text === null)
-                return;
+                return void console.warn('The selected text is `null`.');
 
             const extension_tab = await browser.tabs.create({url: CONFIG.rsvp_html_file_path});
 
