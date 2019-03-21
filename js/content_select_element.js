@@ -32,7 +32,8 @@
         document.addEventListener('mousemove', onmousemove_event);
         document.addEventListener('keydown', onkeydown_event);
         document.addEventListener('click', event  => {
-            return event.target.innerText;
+            stop_hovering();
+            resolve(event.target.innerText)
         }, {once: true});
     });
 })();
