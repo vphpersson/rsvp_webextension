@@ -33,7 +33,7 @@
         document.addEventListener('keydown', onkeydown_event);
         document.addEventListener('click', event  => {
             stop_hovering();
-            resolve(event.target.innerText)
+            resolve(event.target.innerText);
         }, {once: true});
     });
 })();
