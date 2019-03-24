@@ -31,5 +31,5 @@
         return max_node;
     })();
 
-    return article_root_node.innerText;
+    return {title: document.title, text: article_root_node.innerText};
 })();

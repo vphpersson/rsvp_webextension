@@ -1,0 +1,24 @@
+.options-form {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr;
+    grid-column-gap: 1em;
+}
+
+body {
+    display: grid;
+    grid-row-gap: 1rem;
+}
+
+label {
+    text-align: end;
+    padding: 0.5em 0.25em;
+}
+
+input {
+    width: 100%;
+    min-height: 34px;
+}
+
+button {
+    text-align: center;
+}
