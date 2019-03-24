@@ -1,0 +1,60 @@
+{
+  "words_per_minute": {
+    "message": "WPM",
+    "description": "Label text for the WPM input."
+  },
+  "word_color": {
+    "message": "Word color",
+    "description": "Label text for the word color input."
+  },
+  "done_text": {
+    "message": "Done text",
+    "description": "Label text for the \"done text\" input."
+  },
+  "background_color": {
+    "message": "Background color",
+    "description": "Label text for the background color input."
+  },
+  "text_color": {
+    "message": "Text color",
+    "description": "Label text for the text color input."
+  },
+  "save_button_text": {
+    "message": "Save",
+    "description": "The text in the save buttons in the options UI."
+  },
+  "retrieved_text_is_null": {
+    "message": "The selected text is `null`.",
+    "description": "Error message that is used when the retrieved text is null."
+  },
+  "unsupported_receive_text_mode": {
+    "message": "Unsupported `receive_text` mode: $MODE$.",
+    "description": "Error message that is used when specifying an unsupported `receive_text` mode.",
+    "placeholders": {
+      "mode" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "unsupported_message_type": {
+    "message": "Unsupported message type: $MESSAGE_TYPE$.",
+    "description": "Error message that is used when specifying an unsupported message type.",
+    "placeholders": {
+      "message_type" : {
+        "content" : "$1"
+      }
+    }
+  },
+  "word_elements_iterator_is_null": {
+    "message": "The word elements iterator is `null`.",
+    "description": "Error message that is used when the word elements iterator is null."
+  },
+  "unused_change_key": {
+    "message": "Unused change key: $CHANGE_KEY$.",
+    "description": "Informational message that is used when a storage key not associated with an input on the RSVP is part of a change.",
+    "placeholders": {
+      "change_key" : {
+        "content" : "$1"
+      }
+    }  }
+}

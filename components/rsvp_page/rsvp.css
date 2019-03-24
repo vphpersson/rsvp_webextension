@@ -1,0 +1,44 @@
+text-container {
+    display: block;
+    max-width: 80ch;
+    margin: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+word-display {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+options-bar-container {
+    position: sticky;
+    top: 0;
+}
+
+options-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+text-container {
+    padding-top: 4px;
+}
+
+body, hr {
+    margin: 0
+}
+
+label ~ label {
+    margin-left: 10px;
+}

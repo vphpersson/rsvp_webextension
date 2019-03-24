@@ -1,8 +1,9 @@
 {
-  "name": "rsvp_extension",
-  "version": "0.1",
+  "name": "RSVP website reader",
+  "version": "0.9",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
 
   "background": {
@@ -13,11 +14,16 @@
 
   "browser_action": {
     "default_icon": "icons/shovel.svg",
-    "default_title": "TODO",
+    "default_title": "Speed read this website.",
     "default_popup": "components/browser_action/popup.html"
   },
 
-  "description": "TODO.",
+  "options_ui": {
+    "page": "components/options_ui/options_ui.html",
+    "browser_style": true
+  },
+
+  "description": "Rapid serial visual presentation (RSVP) speed reading for websites.",
+  "default_locale": "en",
   "manifest_version": 2
 }
-
