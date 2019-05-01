@@ -10,7 +10,8 @@ const CONFIG = {
     word_color: '#FF0000',
     background_color: '#333333',
     text_color: '#FFFFFF',
-    done_text: 'DONE!'
+    done_text: 'DONE!',
+    selection_color: '#008000'
 };
 
 const INPUT_ATTRIBUTES = {
@@ -29,6 +30,9 @@ const INPUT_ATTRIBUTES = {
         type: 'color'
     },
     text_color: {
+        type: 'color'
+    },
+    selection_color: {
         type: 'color'
     }
 };
