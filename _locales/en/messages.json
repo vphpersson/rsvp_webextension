@@ -19,6 +19,10 @@
     "message": "Text color",
     "description": "Label text for the text color input."
   },
+  "selection_color": {
+    "message": "Selection color",
+    "description": "Label text for the selection color input."
+  },
   "save_button_text": {
     "message": "Save",
     "description": "The text in the save buttons in the options UI."

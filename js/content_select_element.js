@@ -1,6 +1,7 @@
 (() => {
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
         let last_colored_element = null;
+        const {selection_color} = await browser.runtime.sendMessage({message_type: 'get_config'});
 
         function onmousemove_event(event) {
             if (last_colored_element !== null)
@@ -8,7 +9,7 @@
 
             last_colored_element = event.target;
             last_colored_element.dataset.background_color = event.target.style.backgroundColor;
-            event.target.style.backgroundColor = 'green';
+            event.target.style.backgroundColor = selection_color;
         }
 
         function onkeydown_event(event) {
